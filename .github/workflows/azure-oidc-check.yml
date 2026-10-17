@@ -1,0 +1,29 @@
+name: Azure OIDC check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-azure-identity:
+    name: Verify Azure OIDC authentication
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Sign in to Azure with GitHub OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Verify Azure Resource Manager token exchange
+        run: |
+          az account get-access-token --resource https://management.azure.com/ --output none
+          echo "Azure Resource Manager token acquired through GitHub OIDC."

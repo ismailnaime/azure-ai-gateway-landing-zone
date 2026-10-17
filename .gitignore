@@ -1,0 +1,19 @@
+# Terraform working directory and local state
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Local configuration may contain environment values or secrets
+*.tfvars
+*.tfvars.json
+!*.example.tfvars
+
+# Terraform CLI backup
+.terraform.lock.hcl.backup
+
+# Local editor settings
+.vscode/
+*.swp
