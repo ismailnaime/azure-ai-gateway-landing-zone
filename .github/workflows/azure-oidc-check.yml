@@ -13,7 +13,6 @@ jobs:
   verify-azure-identity:
     name: Verify Azure OIDC authentication
     runs-on: ubuntu-latest
-    environment: dev
     permissions:
       id-token: write
       contents: read
