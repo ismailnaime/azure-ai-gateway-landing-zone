@@ -18,6 +18,13 @@ resource "azurerm_subnet" "this" {
 resource "azurerm_route_table" "this" {
   count = var.route_to_firewall ? 1 : 0
 
+  lifecycle {
+    precondition {
+      condition     = var.firewall_private_ip != null
+      error_message = "Set firewall_private_ip when route_to_firewall is true."
+    }
+  }
+
   name                = "rt-${var.name}"
   location            = var.location
   resource_group_name = var.resource_group_name
