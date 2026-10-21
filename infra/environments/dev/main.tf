@@ -42,10 +42,10 @@ module "firewall" {
 module "hub_spoke_peering" {
   source = "../../modules/vnet-peering"
 
-  hub_name                = module.hub_network.virtual_network_name
-  hub_resource_group_name = azurerm_resource_group.this.name
-  hub_virtual_network_id  = module.hub_network.virtual_network_id
-  spoke_name              = module.spoke_network.virtual_network_name
+  hub_name                  = module.hub_network.virtual_network_name
+  hub_resource_group_name   = azurerm_resource_group.this.name
+  hub_virtual_network_id    = module.hub_network.virtual_network_id
+  spoke_name                = module.spoke_network.virtual_network_name
   spoke_resource_group_name = azurerm_resource_group.this.name
   spoke_virtual_network_id  = module.spoke_network.virtual_network_id
 }
