@@ -54,6 +54,9 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Show authenticated Azure identity
+        run: az account show --query "{subscription:id, tenant:tenantId, principal:user.name, principal_type:user.type}" --output table
+
       - name: Check Terraform formatting
         run: terraform fmt -check -recursive
 
