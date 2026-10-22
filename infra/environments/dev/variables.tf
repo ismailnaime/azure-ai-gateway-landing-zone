@@ -35,10 +35,11 @@ variable "hub_address_space" {
 }
 
 variable "hub_subnets" {
-  description = "Hub subnet names mapped to CIDR ranges. AzureFirewallSubnet must be at least /26."
+  description = "Hub subnet names mapped to CIDR ranges. AzureFirewallSubnet and AzureFirewallManagementSubnet must each be at least /26 for the Basic firewall tier."
   type        = map(string)
   default = {
-    AzureFirewallSubnet = "10.0.0.0/26"
+    AzureFirewallSubnet           = "10.0.0.0/26"
+    AzureFirewallManagementSubnet = "10.0.1.0/26"
   }
 }
 

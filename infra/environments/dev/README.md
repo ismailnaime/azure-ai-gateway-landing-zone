@@ -2,7 +2,7 @@
 
 This Terraform root configuration creates a resource group and deploys the hub-and-spoke network foundation in it:
 
-- Hub VNet with the required `AzureFirewallSubnet` (`/26` by default).
+- Hub VNet with the required `AzureFirewallSubnet` (`/26` by default) and the Basic tier's `AzureFirewallManagementSubnet` (`/26` by default).
 - Workload spoke VNet with a workload subnet.
 - Azure Firewall and a spoke route table that sends the default route through it.
 - Bidirectional hub/spoke VNet peering.
@@ -22,6 +22,6 @@ terraform apply
 
 Set `ARM_SUBSCRIPTION_ID` or pass `-var="subscription_id=..."`, and authenticate with Azure CLI or the appropriate service principal environment variables before planning.
 
-Terraform state is stored in the `tfstate` container of the `terraformtfstates` storage account in `shared-ressources`, under `dev.terraform.tfstate`. The storage account and container must already exist. The backend uses Microsoft Entra authentication (`use_azuread_auth = true`); the identity running Terraform needs blob data-plane access, such as **Storage Blob Data Contributor**, on the container or storage account. Run `terraform init` to initialize this backend. If migrating state that is already initialized locally, use `terraform init -migrate-state` and confirm the migration prompt.
+Terraform state is stored in the `tfstate` container of the `terraformtfstateina` storage account in `shared-ressources-inaime`, under `dev.terraform.tfstate`. The storage account and container must already exist. The backend uses Microsoft Entra OIDC authentication; the identity running Terraform needs blob data-plane access, such as **Storage Blob Data Contributor**, on the container or storage account. Run `terraform init` to initialize this backend. If migrating state that is already initialized locally, use `terraform init -migrate-state` and confirm the migration prompt.
 
-The `Terraform dev` GitHub Actions workflow runs formatting, initialization, validation, and planning on pushes to `main` that change `infra/` or the workflow file. It uploads the binary `planfile` as a short-lived artifact. To apply, manually run the workflow with **Apply the plan** enabled; the apply job uses the saved plan from that same run. Configure repository variables `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`, an Azure federated identity credential for GitHub Actions, and blob data-plane permissions for the identity. Treat the plan artifact as sensitive because it can contain infrastructure values.
+The `Terraform dev` GitHub Actions workflow runs formatting, initialization, validation, and planning on pushes to `main` that change `infra/` or the workflow file. It uploads the binary `planfile` as a short-lived artifact. After a successful plan run, manually start **Terraform dev apply** and enter that plan run's ID. The apply workflow verifies that the selected run succeeded on `main`, checks out the exact planned commit, downloads its plan artifact, and applies it. Configure repository variables `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`, an Azure federated identity credential for GitHub Actions, and blob data-plane permissions for the identity. Treat the plan artifact as sensitive because it can contain infrastructure values.

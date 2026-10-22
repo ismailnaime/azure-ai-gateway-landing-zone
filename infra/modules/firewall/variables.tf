@@ -18,6 +18,12 @@ variable "firewall_subnet_id" {
   type        = string
 }
 
+variable "management_subnet_id" {
+  description = "Resource ID of the dedicated AzureFirewallManagementSubnet required for Azure Firewall Basic."
+  type        = string
+  default     = null
+}
+
 variable "sku_tier" {
   description = "Azure Firewall tier. Basic lowers capability and cost; Standard or Premium are typical enterprise tiers."
   type        = string

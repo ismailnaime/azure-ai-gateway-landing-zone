@@ -31,12 +31,13 @@ module "spoke_network" {
 module "firewall" {
   source = "../../modules/firewall"
 
-  name                = "afw-ai-gateway-dev"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  firewall_subnet_id  = module.hub_network.subnet_ids["AzureFirewallSubnet"]
-  sku_tier            = var.firewall_sku_tier
-  tags                = var.tags
+  name                 = "afw-ai-gateway-dev"
+  location             = var.location
+  resource_group_name  = azurerm_resource_group.this.name
+  firewall_subnet_id   = module.hub_network.subnet_ids["AzureFirewallSubnet"]
+  management_subnet_id = module.hub_network.subnet_ids["AzureFirewallManagementSubnet"]
+  sku_tier             = var.firewall_sku_tier
+  tags                 = var.tags
 }
 
 module "hub_spoke_peering" {

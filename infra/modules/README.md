@@ -4,7 +4,7 @@ These local modules are building blocks for a hub-and-spoke workload landing zon
 
 ## Modules
 
-- `hub-network`: hub VNet and caller-defined subnets. Define `AzureFirewallSubnet` as at least `/26` for Azure Firewall.
+- `hub-network`: hub VNet and caller-defined subnets. Define `AzureFirewallSubnet` as at least `/26` for Azure Firewall, and `AzureFirewallManagementSubnet` as at least `/26` when using the Basic tier.
 - `spoke-network`: spoke VNet, subnets, and an optional default route through the firewall.
 - `firewall`: Azure Firewall, Standard static public IP, firewall policy, and optional Log Analytics diagnostics.
 - `vnet-peering`: both directions of a hub/spoke peering with forwarded traffic enabled.

@@ -17,3 +17,8 @@ output "firewall_public_ip" {
   description = "Public IP address resource ID assigned to the firewall."
   value       = azurerm_public_ip.this.id
 }
+
+output "firewall_management_public_ip" {
+  description = "Management public IP address resource ID for Azure Firewall Basic, or null for other tiers."
+  value       = try(azurerm_public_ip.management[0].id, null)
+}
