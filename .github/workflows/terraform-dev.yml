@@ -70,3 +70,47 @@ jobs:
           path: infra/environments/dev/planfile
           if-no-files-found: error
           retention-days: 5
+
+  apply:
+    name: Apply saved plan
+    needs: plan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    defaults:
+      run:
+        working-directory: infra/environments/dev
+
+    env:
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Sign in to Azure with GitHub OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Initialize Terraform
+        run: terraform init -input=false
+
+      - name: Download saved plan artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-dev-plan-${{ github.run_id }}
+          path: infra/environments/dev
+
+      - name: Apply saved plan
+        run: terraform apply -input=false -no-color planfile
